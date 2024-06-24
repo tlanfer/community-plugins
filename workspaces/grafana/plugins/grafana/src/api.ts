@@ -20,7 +20,7 @@ import {
   FetchApi,
 } from '@backstage/core-plugin-api';
 import { QueryEvaluator } from './query';
-import { Alert, Dashboard } from './types';
+import {Alert, Annotations, Dashboard} from './types';
 
 /**
  * Interface for the Grafana API
@@ -58,6 +58,7 @@ type AlertState =
 
 interface AlertInstance {
   labels: Record<string, string>;
+  annotations: Annotations;
   state: AlertState;
 }
 
@@ -209,6 +210,8 @@ export class GrafanaApiClient implements GrafanaApi {
       name: alert.name,
       state: alert.state,
       matchingSelector: dashboardTag,
+      annotations: {} as Annotations,
+      labels: {} as Record<string, string>,
       url: `${this.domain}${alert.url}?panelId=${alert.panelId}&fullscreen&refresh=30s`,
     }));
   }
@@ -302,6 +305,8 @@ export class UnifiedAlertingGrafanaApiClient implements GrafanaApi {
             name: rule.grafana_alert.title,
             url: `${this.domain}/alerting/grafana/${rule.grafana_alert.uid}/view`,
             matchingSelector: selector,
+            annotations: matchingAlertInstances[0].annotations,
+            labels: matchingAlertInstances[0].labels,
             state: this.getState(
               aggregatedAlertStates,
               matchingAlertInstances.length,

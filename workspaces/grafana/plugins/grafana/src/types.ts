@@ -49,6 +49,30 @@ export interface Dashboard {
 }
 
 /**
+ * Grafana alert annotations
+ * @public
+ */
+export interface Annotations {
+  /**
+  * The alert description
+  * @public
+  */
+  description: string;
+
+  /**
+  * The alert runbook URL
+  * @public
+  */
+  runbook_url: string;
+
+  /**
+  * The alert summary
+  * @public
+  */
+  summary: string;
+}
+
+/**
  * Grafana alert parameters
  * @public
  */
@@ -73,6 +97,18 @@ export interface Alert {
    * @public
    */
   url: string;
+
+  /**
+   * The rule annotations
+   * @public
+   */
+  annotations: Annotations;
+
+  /**
+   * The rule labels
+   * @public
+   */
+  labels: Record<string, string>;
 }
 
 /**
